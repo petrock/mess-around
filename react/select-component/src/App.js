@@ -9,25 +9,53 @@ class App extends Component {
     this.handleSelectChange = this.handleSelectChange.bind(this);
 
     this.state = {
-      giInvolvement: 0.5,
-      placebo: 0.3,
-      procedures: 0.3,
-      time: 0.2,
-      openLabel: 0.5,
-      money: -0.8
+      consentType: 'adult',
+      selectValues: {
+        giInvolvement: 0.5,
+        placebo: 0.3,
+        procedures: 0.3,
+        time: 0.2,
+        openLabel: 0.5,
+        money: -0.8
+      }
     };
   }
 
   handleSelectChange( name, value ) {
-    this.setState(
-      { 
-        [name]: Number( parseFloat(value).toFixed(1) )
-      }
-    );
+    if ( name === 'consentType' ) {
+      this.setState( 
+        { [name]: value }
+      );
+    } else {
+      this.setState( { 
+        selectValues: {
+            ...this.state.selectValues, [name]: Number( parseFloat(value).toFixed(1) )
+        }
+      });
+    }
   }
 
   render() {
     const selectConfig = {
+      consentType:
+        { 
+          name: 'consentType',
+          label: 'Consent Type',
+          defaultOption : 'adult',
+          options: [
+            {
+              id: 1,
+              label: 'Adult',
+              value: 'adult',
+            },
+            {
+              id: 2,
+              label: 'Caregiver',
+              value: 'caregiver',
+            },
+          ]
+        },
+
       giInvolvement: 
         { 
           name: 'giInvolvement',
@@ -71,6 +99,34 @@ class App extends Component {
               id: 3,
               label: '5 out of 10 participants will receive placebo',
               value: -0.8,
+            }
+          ]
+        },
+      caregiverPlacebo: 
+        { 
+          name: 'placebo',
+          label: 'Number of participants receiving a placebo',
+          defaultOption : 0.3,
+          options: [
+            {
+              id: 1,
+              label: '0 out of 10 participants will receive placebo',
+              value: 0.5,
+            },
+            {
+              id: 2,
+              label: '2 out of 10 participants will receive placebo',
+              value: 0.4,
+            },
+            {
+              id: 3,
+              label: '3 out of 10 participants will receive placebo',
+              value: 0.3,
+            },
+            {
+              id: 4,
+              label: '5 out of 10 participants will receive placebo',
+              value: -0.7,
             }
           ]
         },
@@ -173,33 +229,49 @@ class App extends Component {
         }
     };
 
+    let select; 
+
+    if ( this.state.consentType === 'adult' ) {
+        select = <Select 
+          config={ selectConfig.placebo }
+          onSelectChange={this.handleSelectChange }/>;
+    } else {
+        select = <Select 
+          config={ selectConfig.caregiverPlacebo }
+          onSelectChange={this.handleSelectChange }/>;
+    }
+
     return (
       <div className="App">
-        <Select 
-          config={ selectConfig.giInvolvement }
-          onSelectChange={this.handleSelectChange} />
+        <div className="selectWrapper">
+          <Select 
+            config={ selectConfig.consentType }
+            onSelectChange={this.handleSelectChange} />
+          
+          {select}
 
-        <Select 
-          config={ selectConfig.placebo }
-          onSelectChange={this.handleSelectChange }/>
+          <Select 
+            config={ selectConfig.giInvolvement }
+            onSelectChange={this.handleSelectChange} />
 
-        <Select 
-          config={ selectConfig.procedures }
-          onSelectChange={this.handleSelectChange }/>
+          <Select 
+            config={ selectConfig.procedures }
+            onSelectChange={this.handleSelectChange }/>
 
-        <Select 
-          config={ selectConfig.time }
-          onSelectChange={this.handleSelectChange }/>
+          <Select 
+            config={ selectConfig.time }
+            onSelectChange={this.handleSelectChange }/>
 
-        <Select 
-          config={ selectConfig.openLabel }
-          onSelectChange={this.handleSelectChange }/>
+          <Select 
+            config={ selectConfig.openLabel }
+            onSelectChange={this.handleSelectChange }/>
 
-        <Select 
-          config={ selectConfig.money }
-          onSelectChange={this.handleSelectChange }/>
+          <Select 
+            config={ selectConfig.money }
+            onSelectChange={this.handleSelectChange }/>
+        </div>
 
-        <Result results={this.state} />
+        <Result results={this.state.selectValues} />
       </div>
     );
   }

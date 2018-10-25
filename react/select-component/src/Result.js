@@ -1,4 +1,5 @@
 import React from 'react';
+import './Result.css';
 
 class Result extends React.Component {
   calculateTotalUtility () {
@@ -17,15 +18,15 @@ class Result extends React.Component {
     var participationPercentage = this.calculatePercentage( totalUtility );
 
     return (
-      <div>
+      <div className="resultWrapper">
         <div> GI Involvement  {this.props.results.giInvolvement}</div>
         <div> Placebo  {this.props.results.placebo}</div>
         <div> Procedures  {this.props.results.procedures}</div>
         <div> Time  {this.props.results.time}</div>
         <div> Open label  {this.props.results.openLabel}</div>
         <div> Money  {this.props.results.money}</div>
-        <div>Total Utility: {totalUtility}  </div>
-        <div>Participation Percentage: {participationPercentage}  </div>
+        <div className="answer">Total Utility: {totalUtility}  </div>
+        <div className="answer">Participation Percentage: {participationPercentage}  </div>
       </div>
     );
   }
