@@ -21,10 +21,7 @@ class App extends Component {
   handleSelectChange( name, value ) {
     this.setState(
       { 
-        [name]: value
-      },
-      () => {
-        console.log(this.state)
+        [name]: Number( parseFloat(value).toFixed(1) )
       }
     );
   }

@@ -1,7 +1,7 @@
 import React from 'react';
 
 class Select extends React.Component {
-    constructor(props) {
+  constructor(props) {
     super(props);
 
     this.handleChange = this.handleChange.bind(this);
